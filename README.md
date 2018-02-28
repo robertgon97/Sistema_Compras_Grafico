@@ -1,2 +1,3 @@
-# Sistema_Compras_Grafico
-Generacion de un sistema de compras
+# Unity-POS
+Point Of Sale System
+This has been designed and developed for fulfillment of my 2nd year,1st semester Project Work.
