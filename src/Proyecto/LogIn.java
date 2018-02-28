@@ -199,7 +199,7 @@ public class LogIn extends javax.swing.JFrame {
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
         if (Character.isDigit(evt.getKeyChar())) {
             getToolkit().beep();
-            evt.consume(); // Detengo la el numero
+            evt.consume(); // Detengo el numero
             JOptionPane.showMessageDialog(null,"Sólo se permiten letras", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jTextField1KeyTyped
