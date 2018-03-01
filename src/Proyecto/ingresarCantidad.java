@@ -32,6 +32,12 @@ public class ingresarCantidad extends javax.swing.JFrame {
 
         jLabel1.setText("Ingrese Cantidad:");
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
+
         jButton1.setText("Aceptar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,6 +90,14 @@ public class ingresarCantidad extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Por favor ingrese una cantidad correcta");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
 
     /**
      * @param args the command line arguments

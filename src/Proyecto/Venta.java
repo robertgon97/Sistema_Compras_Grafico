@@ -76,10 +76,10 @@ public class Venta extends javax.swing.JFrame {
             ResultSet rs =s.executeQuery(sql1);
             if(rs.next()){
                 if(new TablaVentas().dropTable(ab)){
-                System.out.println("droped table "+ab);
+                System.out.println("Tabla vacia "+ab);
                 }
                 else{
-                JOptionPane.showMessageDialog(null, "problem cancelling");
+                JOptionPane.showMessageDialog(null, "Problema al cancelar");
                 }
             }
         }catch(Exception e){
@@ -153,7 +153,7 @@ public class Venta extends javax.swing.JFrame {
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
             Statement s =(Statement) con.prepareStatement(sql);
             s.execute(sql);
-            System.out.println("updated");
+            System.out.println("listo");
             return true;
         }catch(Exception e){
             e.printStackTrace();
@@ -220,7 +220,7 @@ public class Venta extends javax.swing.JFrame {
                 System.out.println(sto);
                 st=sto+"";
                 if(UpdateForUpdatingStock(name,price,"1")){
-                    System.out.println("Success in update");
+                    System.out.println("Exito");
                 }
             }
             return true;
@@ -245,7 +245,7 @@ public class Venta extends javax.swing.JFrame {
                 String sold_price=rs.getString(4);
                 String qua = rs.getString(3);
                 if(UpdateForUpdatingStock(name,price,qua)){
-                    System.out.println("Success in update");
+                    System.out.println("Exito");
                 }
             }
             return true;
@@ -553,6 +553,11 @@ public class Venta extends javax.swing.JFrame {
             jTextField3ActionPerformed(evt);
         }
     });
+    jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            jTextField3KeyTyped(evt);
+        }
+    });
 
     javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
@@ -718,6 +723,9 @@ public class Venta extends javax.swing.JFrame {
         }
     });
     jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            jTextField4KeyTyped(evt);
+        }
         public void keyPressed(java.awt.event.KeyEvent evt) {
             jTextField4KeyPressed(evt);
         }
@@ -729,11 +737,21 @@ public class Venta extends javax.swing.JFrame {
     jLabel9.setText("Tipo:");
 
     jTextField5.setEditable(false);
+    jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            jTextField5KeyTyped(evt);
+        }
+    });
 
     jLabel10.setText("Descuento:");
 
     jTextField6.setEditable(false);
     jTextField6.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+    jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            jTextField6KeyTyped(evt);
+        }
+    });
 
     jLabel11.setText("%");
 
@@ -976,15 +994,15 @@ public class Venta extends javax.swing.JFrame {
                 int id = Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString());
                 if(Integer.parseInt(qua)==0){
                     //JOptionPane.showMessageDialog(null, "Out Of Inventario", "Warning", JOptionPane.INFORMATION_MESSAGE);
-                    JOptionPane.showMessageDialog(null,"no stock left");
-                    int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
+                    JOptionPane.showMessageDialog(null,"Sin Inventario");
+                    int n = JOptionPane.showConfirmDialog(null,"Desea Actualizar el Stock?","",JOptionPane.YES_NO_OPTION);
                     System.out.println("hoho "+n);
                     if(n==0){
                         new ActualizarCantidades(id,this,idd).setVisible(true);
                     }
                 }
                 else if(Integer.parseInt(qua)<=5){
-                    JOptionPane.showMessageDialog(null, "Stock is Low", "Warning", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Stock es pequeño", "Warning", JOptionPane.INFORMATION_MESSAGE);
                     String name = jTable1.getValueAt(0,1).toString();
                     float price = Float.parseFloat(jTable1.getValueAt(0,3).toString());
                     float buy_price = Float.parseFloat(jTable1.getValueAt(0,6).toString());
@@ -998,8 +1016,8 @@ public class Venta extends javax.swing.JFrame {
                             jTextField2.setText(tot+" Bs.");
                         }
                         else{
-                            JOptionPane.showMessageDialog(null,"no stock left");
-                            int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
+                            JOptionPane.showMessageDialog(null,"Sin Stock");
+                            int n = JOptionPane.showConfirmDialog(null,"Desea Actualizar el Stock?","",JOptionPane.YES_NO_OPTION);
                             System.out.println("hoho "+n);
                             if(n==0){
                                 new ActualizarCantidades(id,this,idd).setVisible(true);
@@ -1032,8 +1050,8 @@ public class Venta extends javax.swing.JFrame {
                             jTextField2.setText(tot+" Bs.");
                         }
                         else{
-                            JOptionPane.showMessageDialog(null,"no stock left");
-                            int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
+                            JOptionPane.showMessageDialog(null,"Sin Inventario");
+                            int n = JOptionPane.showConfirmDialog(null,"Desea Actualizar el Stock?","",JOptionPane.YES_NO_OPTION);
                             System.out.println("hoho "+n);
                             if(n==0){
                                 new ActualizarCantidades(id,this,idd).setVisible(true);
@@ -1049,7 +1067,7 @@ public class Venta extends javax.swing.JFrame {
                         System.out.println(item_to_sell);
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "problem");
+                        JOptionPane.showMessageDialog(null, "Error");
                     }
                 }
             jTextField1.setText("");
@@ -1068,15 +1086,15 @@ public class Venta extends javax.swing.JFrame {
         int id = Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString());
         System.out.println("send" + id);
         if(Integer.parseInt(qua)==0){
-            JOptionPane.showMessageDialog(null, "Out Of Stock", "Warning", JOptionPane.INFORMATION_MESSAGE);
-            int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
+            JOptionPane.showMessageDialog(null, "Agotado en el Stock", "Warning", JOptionPane.INFORMATION_MESSAGE);
+            int n = JOptionPane.showConfirmDialog(null,"Desea Actualizar el Stock?","",JOptionPane.YES_NO_OPTION);
             System.out.println("hoho "+n);
             if(n==0){
                 new ActualizarCantidades(id,this,idd).setVisible(true);
             }
         }
         else if(Integer.parseInt(qua)<=5){
-            JOptionPane.showMessageDialog(null, "Stock is Low", "Warning", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Stock es pequeño", "Warning", JOptionPane.INFORMATION_MESSAGE);
             String name = jTable1.getValueAt(jTable1.getSelectedRow(),1).toString();
             float price = Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
             float buy_price = Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(),6).toString());
@@ -1091,7 +1109,7 @@ public class Venta extends javax.swing.JFrame {
                 }
                 else{
                     //JOptionPane.showMessageDialog(null,"no stock left");
-                    int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
+                    int n = JOptionPane.showConfirmDialog(null,"Desea Actualizar el Stock?","",JOptionPane.YES_NO_OPTION);
                     System.out.println("hoho "+n);
                     if(n==0){
                         new ActualizarCantidades(id,this,idd).setVisible(true);
@@ -1107,7 +1125,7 @@ public class Venta extends javax.swing.JFrame {
                  System.out.println(item_to_sell);
              }
              else{
-                JOptionPane.showMessageDialog(null, "problem");
+                JOptionPane.showMessageDialog(null, "Error");
                 }
         }
         else{
@@ -1124,8 +1142,8 @@ public class Venta extends javax.swing.JFrame {
                     jTextField2.setText(tot+" Bs.");
                 }
                 else{
-                    JOptionPane.showMessageDialog(null,"no stock left");
-                    int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
+                    JOptionPane.showMessageDialog(null,"Sin Inventario");
+                    int n = JOptionPane.showConfirmDialog(null,"Desea Actualizar el Stock?","",JOptionPane.YES_NO_OPTION);
                     System.out.println("hoho "+n);
                     if(n==0){
                         new ActualizarCantidades(id,this,idd).setVisible(true);
@@ -1141,7 +1159,7 @@ public class Venta extends javax.swing.JFrame {
                 System.out.println(item_to_sell);
             }
             else{
-                JOptionPane.showMessageDialog(null, "problem");
+                JOptionPane.showMessageDialog(null, "Error");
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked
@@ -1173,7 +1191,7 @@ public class Venta extends javax.swing.JFrame {
                 System.out.println(item_to_sell);
             }
             else{
-                JOptionPane.showMessageDialog(null, "problem");
+                JOptionPane.showMessageDialog(null, "Error");
             }
         }
     }//GEN-LAST:event_jTable1KeyPressed
@@ -1202,7 +1220,7 @@ public class Venta extends javax.swing.JFrame {
 
             }
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Select first to remove");
+            JOptionPane.showMessageDialog(null,"Seleccione el item para eliminar");
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -1211,12 +1229,12 @@ public class Venta extends javax.swing.JFrame {
             String a = "ventan"+jTextField3.getText();
             new TablaVentas().createtable(a);
             retreve(a);
-            String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
+            String tot = String.format("%,.2f", (double)total("Ventana"+jTextField3.getText()));
             jTextField2.setText(tot+" Bs.");
-            JOptionPane.showMessageDialog(null, "Sell Canceled");
+            JOptionPane.showMessageDialog(null, "Cancelado");
         }
         else{
-            JOptionPane.showMessageDialog(null, "problem cancelling");
+            JOptionPane.showMessageDialog(null, "Problema al cancelar");
         }
     }//GEN-LAST:event_jButton10ActionPerformed
 
@@ -1231,10 +1249,10 @@ public class Venta extends javax.swing.JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 String receive = c.jTextField1.getText();
                 if(receive.equalsIgnoreCase("")){
-                    JOptionPane.showMessageDialog(null,"Enter Amount");
+                    JOptionPane.showMessageDialog(null,"Ingresar Cantidad");
                 }
                 else if(!receive.matches("[0-9]+")){
-                    JOptionPane.showMessageDialog(null,"Enter Valid Amount");
+                    JOptionPane.showMessageDialog(null,"Ingrese una cantidad valida");
                     c.jTextField1.setText("");
                 }
                 else{
@@ -1422,7 +1440,7 @@ public class Venta extends javax.swing.JFrame {
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
         String date= ""+ft.format(dNow);
         if(new ActualizarVentas().checkdate(date)){
-            System.out.println("updating");
+            System.out.println("actualizando");
             String read="SELECT * FROM "+b;
             try{
                 Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
@@ -1438,7 +1456,6 @@ public class Venta extends javax.swing.JFrame {
                     if(new ActualizarVentas().searchtodaysell(name, buy_price)){
                         System.out.println(qua);
                         new ActualizarVentas().update(name, qua, buy_price, date);
-                        System.out.println("update done");
                     }
                     else{
                         new ActualizarVentas().add(name, qua, price, buy_price, type, date);
@@ -1493,7 +1510,7 @@ public class Venta extends javax.swing.JFrame {
                 System.out.println("droped table "+ab);
                 }
                 else{
-                JOptionPane.showMessageDialog(null, "problem cancelling");
+                JOptionPane.showMessageDialog(null, "Problema al Cancelar");
                 }
             }
         }catch(Exception e){
@@ -1503,9 +1520,9 @@ public class Venta extends javax.swing.JFrame {
         ventan= new TablaVentas().getSellNumber();
         //To show ventan in frame
         jTextField3.setText(ventan+1+"");
-        new TablaVentas().createtable("ventan"+jTextField3.getText());
+        new TablaVentas().createtable("Ventana"+jTextField3.getText());
         retreve();
-        retreve("ventan"+jTextField3.getText());
+        retreve("Ventana"+jTextField3.getText());
         jLabel12.setText("");
         jTextField4.setText("");
         jTextField5.setText("");
@@ -1515,7 +1532,7 @@ public class Venta extends javax.swing.JFrame {
                 }
         }
             private void matches(String string) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                throw new UnsupportedOperationException("No es Compatible"); 
             }
                 });
     }//GEN-LAST:event_jButton11ActionPerformed
@@ -1579,12 +1596,12 @@ public class Venta extends javax.swing.JFrame {
             a = a - b;
             String tot = String.format("%,.2f", (double)a);
             jTextField2.setText(tot+" Bs.");
-            jLabel12.setText("After Discount");
+            jLabel12.setText("Despues del Descuento");
         }else if(jTextField6.getText().equalsIgnoreCase("")){
             JOptionPane.showMessageDialog(null, "Ingrese una Cedula Valida");
         }
         else{
-            JOptionPane.showMessageDialog(null, "ngrese una Cedula primero");
+            JOptionPane.showMessageDialog(null, "Ingrese una Cedula primero");
         }
     }//GEN-LAST:event_jButton14ActionPerformed
 
@@ -1696,6 +1713,42 @@ jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             JOptionPane.showMessageDialog(null, "Enter Discount First");
         }
     }//GEN-LAST:event_jButton19ActionPerformed
+
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+        if (jTextField4.getText().length() > 7) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+        }
+    }//GEN-LAST:event_jTextField4KeyTyped
+
+    private void jTextField5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField5KeyTyped
+
+    private void jTextField6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField6KeyTyped
 
     /**
      * @param args the command line arguments
