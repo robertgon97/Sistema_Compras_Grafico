@@ -148,7 +148,7 @@ public class LogIn extends javax.swing.JFrame {
                             new Venta(id,1).setVisible(true);
                             setVisible(false);
                             break;
-                        case "asd":
+                        case "Cleaner":
                             Venta sell = new Venta(id,2);
                             setVisible(false);
                             sell.jButton3.setEnabled(false);
