@@ -1,5 +1,7 @@
 package Proyecto;
 
+import javax.swing.JOptionPane;
+
 public class TipodePago extends javax.swing.JFrame{
 
     public TipodePago() {
@@ -25,6 +27,12 @@ public class TipodePago extends javax.swing.JFrame{
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Efectivo", "Debito", "Credito" }));
 
         jLabel2.setText("Importe Total");
+
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         jButton1.setText("Hecho");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -80,6 +88,14 @@ public class TipodePago extends javax.swing.JFrame{
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
