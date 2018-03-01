@@ -33,6 +33,12 @@ public class ActualizarCantidades extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Nueva Cantidad");
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
+
         jButton1.setText("Añadir");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,6 +94,14 @@ public class ActualizarCantidades extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Añadido");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
 
     /**
      * @param args the command line arguments

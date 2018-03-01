@@ -76,8 +76,20 @@ public class EfectivoCaja extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel6.setText("Monto Bs.:");
 
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField5KeyTyped(evt);
+            }
+        });
+
         jLabel7.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel7.setText("Razón de Entrada/Salida:");
+
+        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField6KeyTyped(evt);
+            }
+        });
 
         jButton3.setText("Registrar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -183,6 +195,22 @@ public class EfectivoCaja extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jTextField5KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField5KeyTyped
+
+    private void jTextField6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyTyped
+        if (Character.isDigit(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo el numero
+            JOptionPane.showMessageDialog(null,"Sólo se permiten letras", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField6KeyTyped
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

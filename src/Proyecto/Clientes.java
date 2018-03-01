@@ -73,6 +73,12 @@ public class Clientes extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Nombre");
 
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Apellido");
 
@@ -82,8 +88,32 @@ public class Clientes extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Cedula");
 
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
+
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField4KeyTyped(evt);
+            }
+        });
+
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
+
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Descuento");
+
+        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField6KeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -141,7 +171,12 @@ public class Clientes extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Search");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Card ID", "First Name", "Membership Type" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID", "Nombres", "Tipo" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jTextField5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -382,6 +417,54 @@ public class Clientes extends javax.swing.JFrame {
             retreve();
         }
     }//GEN-LAST:event_jTextField5KeyReleased
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        if (Character.isDigit(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo el numero
+            JOptionPane.showMessageDialog(null,"Sólo se permiten letras", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+        if (Character.isDigit(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo el numero
+            JOptionPane.showMessageDialog(null,"Sólo se permiten letras", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField2KeyTyped
+
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        if (Character.isDigit(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo el numero
+            JOptionPane.showMessageDialog(null,"Sólo se permiten letras", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jTextField6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jTextField6KeyTyped
+
+    private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
+        if(Character.isLetter(evt.getKeyChar())) {
+            getToolkit().beep();
+            evt.consume(); // Detengo la Letra
+            JOptionPane.showMessageDialog(null,"Sólo se permiten Números", "Error de Escritura",JOptionPane.ERROR_MESSAGE);
+        }
+        if (jTextField4.getText().length() > 7) {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTextField4KeyTyped
 
     /**
      * @param args the command line arguments

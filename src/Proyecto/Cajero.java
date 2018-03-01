@@ -83,7 +83,7 @@ public class Cajero extends javax.swing.JFrame {
             jTextField4.setText(in+"");
             jTextField5.setText(in-out+"");
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null,"problem in net sell");
+                JOptionPane.showMessageDialog(null,"Problema en la venta neta");
             }
     }
     
@@ -359,40 +359,35 @@ public class Cajero extends javax.swing.JFrame {
             Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
             Statement s = (Statement) con.prepareStatement(sql);
             ResultSet rs =s.executeQuery(sql);
-            System.out.println("here rep");
-            System.out.println("here rep");
             String fname="",lname="";
             if(rs.next()){
                 fname = rs.getString(2);
                 lname = rs.getString(3);
             }
-            System.out.println("here rep");
             sql = "SELECT * FROM `cajero` WHERE 1";
             s = (Statement) con.prepareStatement(sql);
             rs =s.executeQuery(sql);
-            System.out.println(fname +" "+ lname);
             Document document = new Document(PageSize.A5);
             PdfWriter.getInstance(document,new FileOutputStream("C:\\Reports\\report("+date+").pdf"));
             document.open();
-            System.out.println("here rep");
-            document.add(new Paragraph("UNITY POS REPORS",FontFactory.getFont(FontFactory.TIMES_BOLD, 20, Font.BOLD,BaseColor.BLUE)));
+            document.add(new Paragraph("Informe de Reportes",FontFactory.getFont(FontFactory.TIMES_BOLD, 20, Font.BOLD,BaseColor.BLUE)));
             document.add(new Paragraph(date,FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL,BaseColor.BLACK)));
-            document.add(new Paragraph("Report By "+fname+" "+lname,FontFactory.getFont(FontFactory.TIMES_BOLD, 15, Font.BOLD,BaseColor.DARK_GRAY)));
+            document.add(new Paragraph("Reportado: "+fname+" "+lname,FontFactory.getFont(FontFactory.TIMES_BOLD, 15, Font.BOLD,BaseColor.DARK_GRAY)));
             document.add(new Paragraph("--------------------------------------------------------------------------------------"));
             PdfPTable table =new PdfPTable(4);
             //table.addCell("Date");
             //table.addCell("Cash In/Out");
 
-            PdfPCell cell = new PdfPCell(new Phrase("Date"));
+            PdfPCell cell = new PdfPCell(new Phrase("Fecha"));
             cell.setBackgroundColor(BaseColor.DARK_GRAY);
             table.addCell(cell);
-            PdfPCell ce = new PdfPCell(new Phrase("Cash In/Out"));
+            PdfPCell ce = new PdfPCell(new Phrase("Dinero Entrada/Salida"));
             ce.setBackgroundColor(BaseColor.DARK_GRAY);
             table.addCell(ce);
-            PdfPCell c = new PdfPCell(new Phrase("Cause"));
+            PdfPCell c = new PdfPCell(new Phrase("Causa"));
             c.setBackgroundColor(BaseColor.DARK_GRAY);
             table.addCell(c);
-            PdfPCell cel = new PdfPCell(new Phrase("Amount"));
+            PdfPCell cel = new PdfPCell(new Phrase("Cantidad"));
             cel.setBackgroundColor(BaseColor.DARK_GRAY);
             table.addCell(cel);
             document.add(new Paragraph("  "));
@@ -418,16 +413,15 @@ public class Cajero extends javax.swing.JFrame {
                 t.addCell(amount);
                 document.add(t);
             }
-            System.out.println("in="+in+"out="+out);
             document.add(new Paragraph("  "));
-            document.add(new Paragraph("                                            Total Invested:   "+String.format("%,.2f", out)+" Bs.",FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL,BaseColor.BLACK)));
-            document.add(new Paragraph("                                            Total Return:     "+String.format("%,.2f", in)+" Bs.",FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL,BaseColor.BLACK)));
-            document.add(new Paragraph("                                            Total Earned:     "+String.format("%,.2f", in-out)+" Bs.",FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL,BaseColor.BLACK)));
+            document.add(new Paragraph("                                            Total Invertido:   "+String.format("%,.2f", out)+" Bs.",FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL,BaseColor.BLACK)));
+            document.add(new Paragraph("                                            Total Vuelto:     "+String.format("%,.2f", in)+" Bs.",FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL,BaseColor.BLACK)));
+            document.add(new Paragraph("                                            Total de Ganancias: "+String.format("%,.2f", in-out)+" Bs.",FontFactory.getFont(FontFactory.TIMES_ROMAN, 12, Font.NORMAL,BaseColor.BLACK)));
             document.add(new Paragraph("  "));
             document.add(new Paragraph("--------------------------------------------------------------------------------------"));
             document.close();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,"problem in memoo");
+            JOptionPane.showMessageDialog(null,"Problema en Memoria");
             StringBuilder sb = new StringBuilder(ex.toString());
             for (StackTraceElement ste : ex.getStackTrace()) {
                 sb.append("\n\tat ");
