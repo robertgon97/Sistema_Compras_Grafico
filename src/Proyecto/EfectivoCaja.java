@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Proyecto;
 
 import com.mysql.jdbc.Connection;
@@ -14,20 +9,11 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * 
- */
 public class EfectivoCaja extends javax.swing.JFrame {
 
-    /**
-     * Creates new form payment
-     */
     public EfectivoCaja() {
         initComponents();
     }
-
-    
     public void searchEmployee(String a){
         String conString ="jdbc:mysql://localhost:3306/sistemainventario";
         String username ="root";
@@ -36,30 +22,14 @@ public class EfectivoCaja extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Ingrese un id primero");
         }
         else{
-            
             String sql = "SELECT * FROM empleados WHERE id="+a;
-        
             try{
-
-
                 Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-
                 Statement s =(Statement) con.prepareStatement(sql);
-
                 ResultSet rs =s.executeQuery(sql);
-
-
-
                 while(rs.next()){
 
-
                 }
-
-
-
-
-
-
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -189,49 +159,31 @@ public class EfectivoCaja extends javax.swing.JFrame {
         String cashio = jComboBox1.getSelectedItem()+"";
         String reason = jTextField6.getText();
         String money = jTextField5.getText();
-        
-        
         if(reason.equalsIgnoreCase("")==false && money.equalsIgnoreCase("")==false){
             Date dNow = new Date( );            
             SimpleDateFormat ft = new SimpleDateFormat ("yyyy.MM.dd");
             String date = ""+ft.format(dNow);
-        
             String sql="INSERT INTO `cajero`(`id`, `tipo`, `motivo`, `dinero`, `fecha`) VALUES (NULL,'"+cashio+"','"+reason+"','"+money+"','"+date+"')";
-        
-        
-        
             try{
-            
                 Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
                 Statement s =(Statement) con.prepareStatement(sql);
-            
                 s.execute(sql);
-            
-            
             }catch(Exception e){
                 e.printStackTrace();
             }
-            
             JOptionPane.showMessageDialog(null, cashio+" Hecho");
             jTextField6.setText("");
             jTextField5.setText("");
         }
         else{
             JOptionPane.showMessageDialog(null, "Problema");
-        
         }
-        
-        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

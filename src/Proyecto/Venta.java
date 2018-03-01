@@ -1,11 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Proyecto;
-
-
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -27,10 +20,8 @@ import java.awt.event.ActionListener;
 //import java.awt.event.KeyListener;
 
 import java.io.FileOutputStream;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,16 +38,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * 
- */
 public class Venta extends javax.swing.JFrame {
 
-    /**
-     * Creates new form NewJFrame
-     */
-    
     public static int idd,acc_type;
     
     public Venta(int i,int account_type) {
@@ -66,65 +49,43 @@ public class Venta extends javax.swing.JFrame {
         
         idd = i;
         acc_type = account_type;
-        //so that int choice have a valu;
         new Thread(){
-            
             public void run(){
                 while(true){
                     Date dNow = new Date( );
-                    
                     SimpleDateFormat ft = new SimpleDateFormat ("E yyyy.MM.dd hh:mm:ss a");
                     String time = ""+ft.format(dNow);
-                    
                     jLabel4.setText(time);
-                    
                 }
             }
-            
         }.start();
         jTextField3.setText(ventan+1+"");//to show sell number
-        
         String a = "ventan"+jTextField3.getText();
         new TablaVentas().createtable(a);
         retreve("ventan"+jTextField3.getText());
         //System.out.println(a);
-        
-        
     }
     
-    
-    
-    
     public void dropprevious(){
-        
         int num = Integer.parseInt(jTextField3.getText());
         String ab = "ventan"+num;
-                
         String sql1 = "SELECT * FROM information_schema.tables WHERE table_schema = 'sistemainventario' AND table_name = '"+ab+"' LIMIT 1";
-        
         try{
             Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
             Statement s =(Statement) con.prepareStatement(sql1);
-            
             ResultSet rs =s.executeQuery(sql1);
-            
             if(rs.next()){
                 if(new TablaVentas().dropTable(ab)){
-                
                 System.out.println("droped table "+ab);
                 }
                 else{
                 JOptionPane.showMessageDialog(null, "problem cancelling");
                 }
-                          
             }
         }catch(Exception e){
             e.printStackTrace();
         }
-        
     }
-    
     
     void header(Document document,String name){
         try {
@@ -141,64 +102,36 @@ public class Venta extends javax.swing.JFrame {
         }
     }
     
-    
     public void retreve(String a){
        DefaultTableModel dm = new TablaVentas().getData(a);
-       
         jTable2.setModel(dm);
-        
-        
     }
-    
-    
-    
     
     public float total(String a){
         String conString ="jdbc:mysql://localhost:3306/sistemainventario";
         String username ="root";
         String passward ="";
         float total=0;
-        
         String sql = "SELECT precio FROM "+a;
-        
         try{
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
             Statement s =(Statement) con.prepareStatement(sql);
-            
             ResultSet rs =s.executeQuery(sql);
-            
             while(rs.next()){
-                
                 String price = rs.getString(1);
-                
                 total = total+Float.parseFloat(price);
-                
                 //System.out.println(total);
-                
             }
-            
             return total;
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-        
-        
         return total;
-        
     }
     
-    
-    
     int choice;  ///choice for combo box
-    
-    
     int ventan= new TablaVentas().getSellNumber();//to get sell number
-    
     int item_to_sell=-1;
-    
-   
     
     public void choice(){
         choice = jComboBox1.getSelectedIndex();
@@ -208,177 +141,92 @@ public class Venta extends javax.swing.JFrame {
     
     public void retreve(){
         DefaultTableModel dm = new ActualizarInventario().getData();
-  
         jTable1.setModel(dm);
-        
     }
     
-    
     public boolean UpdateForUpdatingStock(String name,String price,String quantity){
-        
         String conString ="jdbc:mysql://localhost:3306/sistemainventario";
         String username ="root";
         String passward ="";
-        
         String sql="UPDATE productos SET cantidad=cantidad-"+quantity+" WHERE producto='"+name+"' AND precio='"+price+"'";
-        
         try{
-            
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
             Statement s =(Statement) con.prepareStatement(sql);
-            
             s.execute(sql);
-            
             System.out.println("updated");
-            
             return true;
         }catch(Exception e){
             e.printStackTrace();
         }
-        
-        
         return false;
     }
-    
-    
     ///search in the sell table
     public boolean SearchExist(String name,String price,String a){
         String conString ="jdbc:mysql://localhost:3306/sistemainventario";
         String username ="root";
         String passward ="";
-        
         String sql1 = "SELECT * FROM "+a+" WHERE producto ='"+name+"'AND pprecio='"+price+"'";
-        
-        
-       
         String st;
-        
         try{
-            
-            
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
-            Statement s =(Statement) con.createStatement();           
-            
-            
-            
-            //s.setString(1,name);
-            
+            Statement s =(Statement) con.createStatement();    
             ResultSet rs = s.executeQuery(sql1);
-            
-            
-            
             while(rs.next()){
-                
                 return true;
- 
             }
-            
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-        
         return false;
     }
     
-    //get sell quantity
     public int getQua(String name,String price,String a){
-        
         String conString ="jdbc:mysql://localhost:3306/sistemainventario";
         String username ="root";
         String passward ="";
-        
         String sql1 = "SELECT * FROM "+a+" WHERE producto ='"+name+"'AND pprecio='"+price+"'";
-        
-        
-       
         String st;
         int qua=0;
         try{
-            
-            
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
             Statement s =(Statement) con.createStatement();           
-            
-            
-            
-            //s.setString(1,name);
-            
             ResultSet rs = s.executeQuery(sql1);
-            
-            
-            
-            
             while(rs.next()){
-                
                 String quantity = rs.getString(3);
-                
                 qua=Integer.parseInt(quantity);
-                
                 return qua;
- 
             }
-            
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-        
         return qua;
     }
     
-
-    ///search in the product to update stock
     public boolean SearchForUpdate(String name,String price){
         String conString ="jdbc:mysql://localhost:3306/sistemainventario";
         String username ="root";
         String passward ="";
-        
         String sql1 = "SELECT * FROM productos WHERE producto =?";
-        
-        
-        ////+" AND price ="+price+"";
         String st;
         try{
-            
-            
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
-            PreparedStatement s =(PreparedStatement) con.prepareStatement(sql1);           
-            
-            
-            
+            PreparedStatement s =(PreparedStatement) con.prepareStatement(sql1);
             s.setString(1,name);
-            
             ResultSet rs = s.executeQuery();
-            
-            
-            
             while(rs.next()){
-                
                 String p = rs.getString(3);
-                
-                
                 int sto = Integer.parseInt(p);
                 sto=sto-1;
                 System.out.println(sto);
-                
                 st=sto+"";
-                
                 if(UpdateForUpdatingStock(name,price,"1")){
                     System.out.println("Success in update");
                 }
- 
             }
-            
             return true;
         }catch(Exception e){
             e.printStackTrace();
         }
-        
         return false;
     }
     
@@ -386,49 +234,27 @@ public class Venta extends javax.swing.JFrame {
         String conString ="jdbc:mysql://localhost:3306/sistemainventario";
         String username ="root";
         String passward ="";
-        
         String sql = "SELECT * FROM "+a;
-        
-        //int st;
-        
         try{
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
             Statement s =(Statement) con.prepareStatement(sql);
-            
             ResultSet rs =s.executeQuery(sql);
-            
             while(rs.next()){
-                
                 String name = rs.getString(2);
                 String price = rs.getString(4);
                 String sold_price=rs.getString(4);
                 String qua = rs.getString(3);
-                
-                
-                
-                ////updating product table
                 if(UpdateForUpdatingStock(name,price,qua)){
                     System.out.println("Success in update");
                 }
-                
-                
             }
-            
             return true;
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-        
         return false;
     }
     
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -1128,15 +954,10 @@ public class Venta extends javax.swing.JFrame {
        Inventario st =  new Inventario(idd,this);
        if(acc_type!=1) st.jButton6.setVisible(false);
        st.setVisible(true);
-       
-       
        st.jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                
                 DefaultTableModel dm = new ActualizarInventario().getData();
-        
                 jTable1.setModel(dm);
-                
             }
        });
         
@@ -1149,26 +970,18 @@ public class Venta extends javax.swing.JFrame {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         DefaultTableModel dm = new ActualizarInventario().search(choice,jTextField1.getText());
         jTable1.setModel(dm);
-        
-        
-        
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             try{
                 String qua = jTable1.getValueAt(0,2).toString();
                 int id = Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString());
-        
-        
                 if(Integer.parseInt(qua)==0){
                     //JOptionPane.showMessageDialog(null, "Out Of Inventario", "Warning", JOptionPane.INFORMATION_MESSAGE);
                     JOptionPane.showMessageDialog(null,"no stock left");
                     int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
-
                     System.out.println("hoho "+n);
-
                     if(n==0){
                         new ActualizarCantidades(id,this,idd).setVisible(true);
                     }
-
                 }
                 else if(Integer.parseInt(qua)<=5){
                     JOptionPane.showMessageDialog(null, "Stock is Low", "Warning", JOptionPane.INFORMATION_MESSAGE);
@@ -1176,42 +989,30 @@ public class Venta extends javax.swing.JFrame {
                     float price = Float.parseFloat(jTable1.getValueAt(0,3).toString());
                     float buy_price = Float.parseFloat(jTable1.getValueAt(0,6).toString());
                     String type = jTable1.getValueAt(0,4).toString();
-
-
-
-
                     if(SearchExist(name, price+"","ventan"+jTextField3.getText())){
-
                     int sellquantity = getQua(name, price+"","ventan"+jTextField3.getText());
-
                         if(sellquantity < Integer.parseInt(qua)){/// checking if sell quantity gets bigger than product quntity
                             new TablaVentas().update("ventan"+jTextField3.getText(),name, price);
                             retreve("ventan"+jTextField3.getText());
                             String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                             jTextField2.setText(tot+" Bs.");
-
                         }
                         else{
                             JOptionPane.showMessageDialog(null,"no stock left");
                             int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
-
                             System.out.println("hoho "+n);
-
                             if(n==0){
                                 new ActualizarCantidades(id,this,idd).setVisible(true);
                             }
-
                         }
                     }
                     ////before experimenting
                     else if(new TablaVentas().add("ventan"+jTextField3.getText(),name, price," 2%",buy_price,type)){
                         item_to_sell++;
                         retreve("ventan"+jTextField3.getText());
-                        
                         String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                         jTextField2.setText(tot+" Bs.");
                         System.out.println(item_to_sell);
-
                      }
                      else{
                         JOptionPane.showMessageDialog(null, "problem");
@@ -1222,79 +1023,54 @@ public class Venta extends javax.swing.JFrame {
                     float price = Float.parseFloat(jTable1.getValueAt(0,3).toString());
                     float buy_price = Float.parseFloat(jTable1.getValueAt(0,6).toString());
                     String type = jTable1.getValueAt(0,4).toString();
-
-
                     if(SearchExist(name, price+"","ventan"+jTextField3.getText())){
-
                         int sellquantity = getQua(name, price+"","ventan"+jTextField3.getText());
-
                         if(sellquantity < Integer.parseInt(qua)){/// checking if sell quantity gets bigger than product quntity
                             new TablaVentas().update("ventan"+jTextField3.getText(),name, price);
                             retreve("ventan"+jTextField3.getText());
                             String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                             jTextField2.setText(tot+" Bs.");
-
                         }
                         else{
                             JOptionPane.showMessageDialog(null,"no stock left");
                             int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
-
                             System.out.println("hoho "+n);
-
                             if(n==0){
                                 new ActualizarCantidades(id,this,idd).setVisible(true);
                             }
-
                         }
                     }
                     ////before experimenting
                     else if(new TablaVentas().add("ventan"+jTextField3.getText(),name, price," 2%",buy_price,type)){
                         item_to_sell++;
                         retreve("ventan"+jTextField3.getText());
-                        
                         String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                         jTextField2.setText(tot+" Bs.");
                         System.out.println(item_to_sell);
-
                     }
                     else{
                         JOptionPane.showMessageDialog(null, "problem");
                     }
-
-
                 }
             jTextField1.setText("");
             }catch(Exception e){
                 
             }
-            
         }
-        
-        
-        
         
         if(jTextField1.getText().equalsIgnoreCase("")){
             retreve();
         }
-        
-        
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        
-        
         String qua = jTable1.getValueAt(jTable1.getSelectedRow(),2).toString();
         int id = Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(),0).toString());
-        
         System.out.println("send" + id);
-        
-        
         if(Integer.parseInt(qua)==0){
             JOptionPane.showMessageDialog(null, "Out Of Stock", "Warning", JOptionPane.INFORMATION_MESSAGE);
             int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
-            
             System.out.println("hoho "+n);
-                    
             if(n==0){
                 new ActualizarCantidades(id,this,idd).setVisible(true);
             }
@@ -1305,40 +1081,30 @@ public class Venta extends javax.swing.JFrame {
             float price = Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
             float buy_price = Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(),6).toString());
             String type = jTable1.getValueAt(jTable1.getSelectedRow(),4).toString();
-        
-            
             if(SearchExist(name, price+"","ventan"+jTextField3.getText())){
-                
                 int sellquantity = getQua(name, price+"","ventan"+jTextField3.getText());
-                
                 if(sellquantity < Integer.parseInt(qua)){/// checking if sell quantity gets bigger than product quntity
                     new TablaVentas().update("ventan"+jTextField3.getText(),name, price);
                     retreve("ventan"+jTextField3.getText());
                     String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                     jTextField2.setText(tot+" Bs.");
-                    
                 }
                 else{
                     //JOptionPane.showMessageDialog(null,"no stock left");
                     int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
-            
                     System.out.println("hoho "+n);
-                    
                     if(n==0){
                         new ActualizarCantidades(id,this,idd).setVisible(true);
                     }
-                    
                 }
             }
             ////before experimenting
             else if(new TablaVentas().add("ventan"+jTextField3.getText(),name, price," 2%",buy_price,type)){
                 item_to_sell++;
                 retreve("ventan"+jTextField3.getText());
-                
                 String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                 jTextField2.setText(tot+" Bs.");
                  System.out.println(item_to_sell);
-            
              }
              else{
                 JOptionPane.showMessageDialog(null, "problem");
@@ -1349,58 +1115,35 @@ public class Venta extends javax.swing.JFrame {
              float price = Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
             float buy_price = Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(),6).toString());
             String type = jTable1.getValueAt(jTable1.getSelectedRow(),4).toString();
-        
-           
             if(SearchExist(name, price+"","ventan"+jTextField3.getText())){
-            
                 int sellquantity = getQua(name, price+"","ventan"+jTextField3.getText());
-                
                 if(sellquantity < Integer.parseInt(qua)){/// checking if sell quantity gets bigger than product quntity
                     new TablaVentas().update("ventan"+jTextField3.getText(),name, price);
                     retreve("ventan"+jTextField3.getText());
-                    
                     String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                     jTextField2.setText(tot+" Bs.");
-                    
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"no stock left");
                     int n = JOptionPane.showConfirmDialog(null,"Would you like update Stock?","",JOptionPane.YES_NO_OPTION);
-            
                     System.out.println("hoho "+n);
-                    
                     if(n==0){
                         new ActualizarCantidades(id,this,idd).setVisible(true);
                     }
-                
                 }
             }
             ////before experimenting
             else if(new TablaVentas().add("ventan"+jTextField3.getText(),name, price," 2%",buy_price,type)){
                 item_to_sell++;
                 retreve("ventan"+jTextField3.getText());
-                
                 String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                 jTextField2.setText(tot+" Bs.");
                 System.out.println(item_to_sell);
-
             }
             else{
                 JOptionPane.showMessageDialog(null, "problem");
             }
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-   
-        
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -1414,22 +1157,12 @@ public class Venta extends javax.swing.JFrame {
             float price = Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(),3).toString());
             float buy_price = Float.parseFloat(jTable1.getValueAt(jTable1.getSelectedRow(),6).toString());
             String type = jTable1.getValueAt(jTable1.getSelectedRow(),4).toString();
-            
-            //new TablaVentas().createtable("ventan"+jTextField3.getText());
-            /*if(new TablaVentas().update("ventan"+jTextField3.getText(),name, price)){
-            retreve("ventan"+jTextField3.getText());
-            jTextField2.setText(total("ventan"+jTextField3.getText())+"tk");
-            
-            
-            }*/
             if(SearchExist(name, price+"","ventan"+jTextField3.getText())){
-                
                 new TablaVentas().update("ventan"+jTextField3.getText(),name, price);
                 retreve("ventan"+jTextField3.getText());
                 //jTextField2.setText(total("ventan"+jTextField3.getText())+" Bs.");
                 String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                 jTextField2.setText(tot+" Bs.");
-                
             }
             ////before experimenting
             else if(new TablaVentas().add("ventan"+jTextField3.getText(),name, price," 2%",buy_price,type)){
@@ -1438,67 +1171,39 @@ public class Venta extends javax.swing.JFrame {
                 String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                 jTextField2.setText(tot+" Bs.");
                 System.out.println(item_to_sell);
-                
             }
             else{
                 JOptionPane.showMessageDialog(null, "problem");
             }
         }
-            
-        
-            
-            
-        
-            
     }//GEN-LAST:event_jTable1KeyPressed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        
-        
-            try{
-                int index = jTable2.getSelectedRow();
-                String id =jTable2.getValueAt(index,0).toString();
-                String qua =jTable2.getValueAt(index,3).toString();
-                String perprice =jTable2.getValueAt(index,2).toString();
-                if(Integer.parseInt(qua)==1){
-                    if(new TablaVentas().delete(id,"ventan"+jTextField3.getText())){
+        try{
+            int index = jTable2.getSelectedRow();
+            String id =jTable2.getValueAt(index,0).toString();
+            String qua =jTable2.getValueAt(index,3).toString();
+            String perprice =jTable2.getValueAt(index,2).toString();
+            if(Integer.parseInt(qua)==1){
+                if(new TablaVentas().delete(id,"ventan"+jTextField3.getText())){
+                item_to_sell--;
+                retreve("ventan"+jTextField3.getText());
+                String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
+                jTextField2.setText(tot+" Bs.");
+                }
+            }
+            else if(Integer.parseInt(qua)!=1){
+                if(new TablaVentas().updateSell("ventan"+jTextField3.getText(),id,perprice)){
                     item_to_sell--;
                     retreve("ventan"+jTextField3.getText());
                     String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
                     jTextField2.setText(tot+" Bs.");
-                    }
                 }
-                else if(Integer.parseInt(qua)!=1){
-                    if(new TablaVentas().updateSell("ventan"+jTextField3.getText(),id,perprice)){
-                        item_to_sell--;
-                        retreve("ventan"+jTextField3.getText());
-                        String tot = String.format("%,.2f", (double)total("ventan"+jTextField3.getText()));
-                        jTextField2.setText(tot+" Bs.");
-                    }
-                    
-                }
-            
-                
-                
-            }catch(Exception e){
-                JOptionPane.showMessageDialog(null,"Select first to remove");
-            }
-            
 
-        //String[] option = {"YES","NO"};
-        
-        //int ans = JOptionPane.showOptionDialog(null, "Sure To Delete?", "DELETED", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
-        
-        /*if(ans==0){
-            int index = jTable2.getSelectedRow();
-            DefaultTableModel model = (DefaultTableModel)jTable2.getModel();
-            for(int col =0;col<=5;col++){
-                model.moveRow(ABORT, col, col);
             }
-            
-            
-            
-       // }/*/
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Select first to remove");
+        }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
@@ -1513,7 +1218,6 @@ public class Venta extends javax.swing.JFrame {
         else{
             JOptionPane.showMessageDialog(null, "problem cancelling");
         }
-
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
@@ -1521,11 +1225,8 @@ public class Venta extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        
-        
         TipodePago c = new TipodePago();
         c.setVisible(true);
-        
         c.jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 String receive = c.jTextField1.getText();
@@ -1544,81 +1245,40 @@ public class Venta extends javax.swing.JFrame {
         if(CreatingSell(b)){
             System.out.println("Success is final");
         }
-        
-        
-        ///code for updatng solddtime
-        
-        
         if(new ActualizarTiempoVenta().getToday(b)){
             System.out.println("Fecha actualizada");
         }
-        
-        ////code for updating sold
-        
-        
         String sq = "SELECT * FROM "+b;
-        
         try{
-            
             Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
             Statement s = (Statement) con.prepareStatement(sq);
-        
-            
             ResultSet rs =s.executeQuery(sq);
-            
             while(rs.next()){
                 String name = rs.getString(2);
                 String price = rs.getString(4);
                 String buy_price = rs.getString(7);
                 String type = rs.getString(8);
                 String qua = rs.getString(3);
-                
-                
                 if(new TablaVentas().SearchExistItem(name, price+"","ventas")){
-            
                     new TablaVentas().updateItem("ventas",name,Float.parseFloat(price),qua);
-            
-            
-            
                 }
-        
                 else if(new TablaVentas().addItem("ventas",name, Float.parseFloat(price)," 2%",Float.parseFloat(buy_price),type,qua)){
-                    
-                    
-                    
-                    
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "problem");
                 }
             }
-            
         }catch(Exception e){
             
         }
-        
-        
-        
-        
-
-        //code for invoice
-        
         double a=0;
-        
         int length;
         String sql = "SELECT * FROM "+b;
-        
         String sqlnew = "SELECT count(*) FROM "+b;
-        
         String sqlname = "SELECT `nombre`,`apellido` FROM `empleados` WHERE `id` = "+idd;
-        
         File theDir = new File("C:\\Recept");
-
-        // if the directory does not exist, create it
         if (!theDir.exists()) {
-        //System.out.println("creating directory: " + directoryName);
             boolean result = false;
-
             try{
                 theDir.mkdir();
                 result = true;
@@ -1627,20 +1287,12 @@ public class Venta extends javax.swing.JFrame {
             //handle it
             }
         }
-            
         try {
-            
             Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-
-
             Statement ss = (Statement) con.prepareStatement(sqlnew);
-
             Statement s = (Statement) con.prepareStatement(sql);
-
             ResultSet rs =s.executeQuery(sql);
-
             ResultSet rss =ss.executeQuery(sqlnew);
-            
             
             String fname = "";
             String lname = "";
@@ -1655,49 +1307,23 @@ public class Venta extends javax.swing.JFrame {
                 }
                 seller_name = fname + " " + lname;
             }
-            
-            
-
-            
-
-
             int tou = 8;
-
             if(rss.next()){
-
                 String sp = rss.getString(1);
-
                 tou = Integer.parseInt(sp);
-
-
             }
-
-            
-
-
             Document document = new Document();
-
-
             int siz = 380;
-
-           
             System.out.println("siz   "+siz);
-
             Rectangle test = new Rectangle(223,siz);
             document.setPageSize(test);
             PdfWriter.getInstance(document,new FileOutputStream("C:\\Recept\\"+b+".pdf"));
-
             System.out.println("HEREEE    ");
             document.open();
-            
             header(document,seller_name);
-            
             System.out.println(seller_name);
-
             System.out.println("HEREEE    ");
-            
             int ck = 0,page=1;
-
             while(rs.next()){
                 ck++;
                 if(ck==9){
@@ -1719,35 +1345,22 @@ public class Venta extends javax.swing.JFrame {
                 else{
                     length = 25;
                 }
-                
                 double amo = Double.parseDouble(rate);
-
-
                 rate = String.format("%,.2f", amo);
-                
                 amo = Double.parseDouble(amount);
-                
                 amount = String.format("%,.2f", amo);
-                
                 document.add(new Paragraph(name.substring(0,length),FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL,BaseColor.BLACK)));
                 document.add(new Paragraph("                             "+qua+"           "+rate+"          "+amount+"",FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL,BaseColor.BLACK)));
                 //document.add(new Paragraph("                                        ",FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL,BaseColor.BLACK)));
                 //t.addCell(rate);
                 //t.addCell(amount);
-
             }
-            
             if(ck>=6){
                 document.add(new Paragraph("--------------------------------------------------------",FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL,BaseColor.BLACK)));
                 document.add(new Paragraph("                Pagina Num.: "+ page++ ,FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL,BaseColor.BLACK)));
                 document.newPage();
                 header(document,seller_name);
             }
-
-            System.out.println("HEREEE    now");
-
-            //document.add(new Paragraph("                                   "));
-            //document.add(new Paragraph("                                   "));
             String am = String.format("%,.2f", a);
             document.add(new Paragraph("--------------------------------------------------------",FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL,BaseColor.BLACK)));
             document.add(new Paragraph("                                         Total = "+am+" Bs.",FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL,BaseColor.BLACK)));
@@ -1794,228 +1407,117 @@ public class Venta extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"problem in memoo");
         }
         
-         ///////////////////////////
-         //to open pdf invoice
         try {
-           
-
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+"C:\\Recept\\"+b+".pdf");
         } catch (IOException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
-         ///////////////////////////
-         //to open pdf invoice
         try {
-           
-
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+"C:\\Recept\\"+b+".pdf");
         } catch (IOException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
-        ////update todaySell
-        
         Date dNow = new Date( );
-                    
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
-    
         String date= ""+ft.format(dNow);
-        
-        
-        
         if(new ActualizarVentas().checkdate(date)){
-            
             System.out.println("updating");
             String read="SELECT * FROM "+b;
-            
             try{
-            
                 Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
                 Statement s =(Statement) con.prepareStatement(read);
-            
                 ResultSet rs =s.executeQuery(read);
-                
                 while(rs.next()){
-                    
-                    
-                String name = rs.getString(2);
-                String price = rs.getString(4);
-                String buy_price = rs.getString(7);
-                String type = rs.getString(8);
-                String qua = rs.getString(3);
-                
-                if(new ActualizarVentas().searchtodaysell(name, buy_price)){
-                    
-                    System.out.println(qua);
-                    new ActualizarVentas().update(name, qua, buy_price, date);
-                    System.out.println("update done");
+                    String name = rs.getString(2);
+                    String price = rs.getString(4);
+                    String buy_price = rs.getString(7);
+                    String type = rs.getString(8);
+                    String qua = rs.getString(3);
+
+                    if(new ActualizarVentas().searchtodaysell(name, buy_price)){
+                        System.out.println(qua);
+                        new ActualizarVentas().update(name, qua, buy_price, date);
+                        System.out.println("update done");
+                    }
+                    else{
+                        new ActualizarVentas().add(name, qua, price, buy_price, type, date);
+                    }
                 }
-                else{
-                    
-                    new ActualizarVentas().add(name, qua, price, buy_price, type, date);
-                    
-                }
-                
-                
-                }
-            
             }catch(Exception e){
                 e.printStackTrace();
             }
-            
-            
-            
         }else{
-            
             String sqldrop="DELETE FROM `ventash` WHERE 1";
-        
             try{
-            
                 Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
                 Statement s =(Statement) con.prepareStatement(sqldrop);
-            
                 s.execute(sqldrop);
-            
-            
             }catch(Exception e){
                 e.printStackTrace();
             }
-            
             String adddate = "INSERT INTO `ventash`(`numero`, `producto`, `cantidad`, `precio`, `precio_compra`, `tipo`, `fecha`) VALUES (NULL,'a','0','0','0','NULL','"+date+"')";
-            
-            
-            
             try{
-            
                 Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
                 Statement s =(Statement) con.prepareStatement(adddate);
-            
                 s.execute(adddate);
-            
-            
             }catch(Exception e){
                 e.printStackTrace();
             }
-            
-            
-            
             String read="SELECT * FROM "+b;
-            
             try{
-            
                 Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
                 Statement s =(Statement) con.prepareStatement(read);
-            
                 ResultSet rs =s.executeQuery(read);
-                
                 while(rs.next()){
-                    
-                    
-                String name = rs.getString(2);
-                String price = rs.getString(4);
-                String buy_price = rs.getString(7);
-                String type = rs.getString(8);
-                String qua = rs.getString(3);
-                
-                new ActualizarVentas().add(name, qua, price, buy_price, type, date);
+                    String name = rs.getString(2);
+                    String price = rs.getString(4);
+                    String buy_price = rs.getString(7);
+                    String type = rs.getString(8);
+                    String qua = rs.getString(3);
+                    new ActualizarVentas().add(name, qua, price, buy_price, type, date);
                 }
-            
             }catch(Exception e){
                 e.printStackTrace();
             }
-            
         }
-        
-        
-        
-        
-        
-        
-        //droping previous sell
         int num = Integer.parseInt(jTextField3.getText());
         String ab = "sellno"+num;
-                
         String sql1 = "SELECT * FROM information_schema.tables WHERE table_schema = 'sistemainventario' AND table_name = '"+ab+"' LIMIT 1";
-        
         try{
             Connection con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
             Statement s =(Statement) con.prepareStatement(sql1);
-            
             ResultSet rs =s.executeQuery(sql1);
-            
             if(rs.next()){
                 if(new TablaVentas().dropTable(ab)){
-                
                 System.out.println("droped table "+ab);
                 }
                 else{
                 JOptionPane.showMessageDialog(null, "problem cancelling");
                 }
-                          
             }
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-        
-        
-        
-        
-        //To update the number of sellno in db
-        
         new TablaVentas().updateSellNumber();
         ventan= new TablaVentas().getSellNumber();
         //To show ventan in frame
         jTextField3.setText(ventan+1+"");
-        
         new TablaVentas().createtable("ventan"+jTextField3.getText());
         retreve();
-        
-        
         retreve("ventan"+jTextField3.getText());
-        
-        
-        //
-        
-        ///clear discount
         jLabel12.setText("");
         jTextField4.setText("");
         jTextField5.setText("");
         jTextField6.setText("");
         jTextField2.setText("");
-        
-        
-        
         c.dispose();
-                    
                 }
-                
-                
-                
-        
-            
         }
-
             private void matches(String string) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
-
-            
-        
-        
                 });
-
-        
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -2045,42 +1547,25 @@ public class Venta extends javax.swing.JFrame {
         String conString ="jdbc:mysql://localhost:3306/sistemainventario";
         String username ="root";
         String passward ="";
-        
-        
         String sql ="SELECT * FROM clientes WHERE cedula =?";
-        
         try{
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
             PreparedStatement s =(PreparedStatement) con.prepareStatement(sql);
-            
             s.setString(1,jTextField4.getText());
-            
             ResultSet rs = s.executeQuery();
-            
             if(rs.next()){
-                
                 String mem = rs.getString("Tipo");
                 jTextField5.setText(mem);
-                
                 String dis = rs.getString("Descuento");
                 jTextField6.setText(dis);
-                
             }
             else{
                 jTextField5.setText("");
                 jTextField6.setText("");
             }
-            
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-        
-        
-        
-        
-        
     }//GEN-LAST:event_jTextField4KeyReleased
 
     private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
@@ -2088,15 +1573,11 @@ public class Venta extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField4KeyPressed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        
         if(jTextField4.getText().equalsIgnoreCase("")==false && jTextField6.getText().equalsIgnoreCase("")==false){
             float a = total("ventan"+jTextField3.getText());
             float b = (a * Float.parseFloat(jTextField6.getText()))/100;
-        
             a = a - b;
-            
             String tot = String.format("%,.2f", (double)a);
-            
             jTextField2.setText(tot+" Bs.");
             jLabel12.setText("After Discount");
         }else if(jTextField6.getText().equalsIgnoreCase("")){
@@ -2105,11 +1586,9 @@ public class Venta extends javax.swing.JFrame {
         else{
             JOptionPane.showMessageDialog(null, "ngrese una Cedula primero");
         }
-        
     }//GEN-LAST:event_jButton14ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        
         new TablaVentas().dropTable("ventan"+jTextField3.getText());
         new LogIn().setVisible(true);
         setVisible(false);
@@ -2126,13 +1605,9 @@ public class Venta extends javax.swing.JFrame {
        cc.setVisible(true);
        cc.jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                
                 String[] option = {"YES","NO"};
                 int ans = JOptionPane.showOptionDialog(null, "Are you sure?", "Cash Closed", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
-        
                 if(ans==0){
-
-                    //drop all previous data
                     if(new ActualizarCajero().drop()){
                     cc.retreve();
                     cc.jTextField3.setText("");
@@ -2143,15 +1618,12 @@ public class Venta extends javax.swing.JFrame {
                     Venta a = new Venta(idd,acc_type);
                     a.setVisible(true);
                     cc.dispose();
-                    
                     cc.setVisible(true);
                     }
-            
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"Canceled");
                 }
-                
             }
        });
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Proyecto;
 
 import com.mysql.jdbc.Connection;
@@ -13,58 +8,30 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * 
- */
 public class PanelGerente extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ManagerPanel
-     */
     public PanelGerente() {
         initComponents();
         int num = getSellNumber();
-        //String number = "sellno"+num;
-        
         settodaysell();
         retreve("ventash");
         getToday();
         getTime();
-        
     }
-    
-    
-    
-    
-    
-    
-    
     String conString ="jdbc:mysql://localhost:3306/sistemainventario";
     String username ="root";
     String passward ="";
-    
-    
     public String getTime(){
-        
         String sql = "SELECT * FROM fechaventa ORDER BY id DESC LIMIT 1";
-        
         String a="";
-        
         try{
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
             Statement s =(Statement) con.prepareStatement(sql);
-            
             ResultSet rs =s.executeQuery(sql);
-            
             String date= "";
-            
             while(rs.next()){
-                
                 date = rs.getString(6);
             }
-            
             jTextField2.setText(date);
             return date;
         }
@@ -73,75 +40,41 @@ public class PanelGerente extends javax.swing.JFrame {
         }
         return a;
     }
-    
-    
     Date dNow = new Date( );
-                    
     SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
-    
     String date= ""+ft.format(dNow);
     
-    
-    
     public void settodaysell(){
-        
         String sql = "SELECT * FROM ventash ORDER BY numero ASC LIMIT 1";
-        
         try{
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
             Statement s =(Statement) con.prepareStatement(sql);
-            
             ResultSet rs =s.executeQuery(sql);
-            
             String d= "";
-            
             while(rs.next()){
-                
                 d = rs.getString(7);
             }
-            
-            //System.out.println(d);
-            //System.out.println(date);
             if(date.equalsIgnoreCase(d)){
                 //System.out.println(d);
                 return;
-            
             }
             else{
-                
                 String sqldrop="DELETE FROM `ventash` WHERE 1";
-        
                 try{
-            
                     con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
                     s =(Statement) con.prepareStatement(sqldrop);
-            
                     s.execute(sqldrop);
-            
-            
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-            
                 String adddate = "INSERT INTO `ventash`(`numero`, `producto`, `cantidad`, `precio`, `precio_compra`, `tipo`, `fecha`) VALUES (NULL,'a','0','0','0','NULL','"+date+"')";
-            
-            
-            
                 try{
-            
                     con= (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/sistemainventario", "root", "");
-            
                     s =(Statement) con.prepareStatement(adddate);
-            
                     s.execute(adddate);
-            
-            
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-                
             }
             
         }catch(Exception e){
@@ -149,97 +82,59 @@ public class PanelGerente extends javax.swing.JFrame {
         }
     }
     
-    
-    
-    
     public void getToday(){
-        
         String sql = "SELECT * FROM fechaventa WHERE cast(tiempo as date) = '"+date+"'";
-        
-        
     }
-    
     
     public void retreve(String a){
        DefaultTableModel dm = getData(a);
-        
         jTable1.setModel(dm);
     }
     
     public DefaultTableModel getData(String a){
-        
         DefaultTableModel dm = new DefaultTableModel();
         dm.addColumn("Nombre");
         dm.addColumn("Cantidad");
         dm.addColumn("Precio");
         dm.addColumn("Precio Compra");
         dm.addColumn("Tipo");
-        
-        
         String sql = "SELECT * FROM "+a;
-        
         try{
             Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-            
             Statement s =(Statement) con.prepareStatement(sql);
-            
             ResultSet rs =s.executeQuery(sql);
-            
             while(rs.next()){
-                
                 String name = rs.getString(2);
                 if(name.equalsIgnoreCase("a")) continue;
                 String quantity = rs.getString(3);
-                
-                
                 String price = rs.getString(4);
                 String buy_price = rs.getString(5);
                 String type = rs.getString(6);
-                
-                
-                //System.out.println(total);
-                
                 dm.addRow(new String[]{name,quantity,price,buy_price,type});
-                
-                
-                
             }
-            
             return dm;
-            
         }catch(Exception e){
             e.printStackTrace();
         }
-        
         return null;
     }
     
     public int getSellNumber(){
-        
         String cons ="jdbc:mysql://localhost:3306/sistemainventario";
         String user ="root";
         String pass ="";
-        
         int a=0;
         String sql = "SELECT numero FROM ventanumero";
         String id="";
-        
-        
         try{
             Connection con= (Connection) DriverManager.getConnection(cons,user,pass);
-            
             Statement s =(Statement) con.prepareStatement(sql);
-            
             ResultSet rs =s.executeQuery(sql);
-            
             while(rs.next()){
                 id = rs.getString(1);
             }
-            
-            
             a= Integer.parseInt(id);
             return a;
-            
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -248,11 +143,6 @@ public class PanelGerente extends javax.swing.JFrame {
         return a;
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
