@@ -25,7 +25,6 @@ public class LogIn extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jPasswordField1 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -65,8 +64,6 @@ public class LogIn extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Director", "Empleado", "Cliente" }));
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -78,11 +75,13 @@ public class LogIn extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1)
-                    .addComponent(jPasswordField1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                    .addComponent(jPasswordField1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(55, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,11 +94,9 @@ public class LogIn extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(32, 32, 32)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -134,54 +131,41 @@ public class LogIn extends javax.swing.JFrame {
     String passward ="";
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        choice = jComboBox1.getSelectedItem()+"";
         String pass = String.valueOf(jPasswordField1.getPassword());
-        if(jTextField1.getText().equalsIgnoreCase("") && pass.equalsIgnoreCase("")  && !choice.equalsIgnoreCase("guest")){
+        if(jTextField1.getText().equalsIgnoreCase("") && pass.equalsIgnoreCase("")){
             JOptionPane.showMessageDialog(null,"Ingrese usuario y/o contraseña", "Acceso Denegado",JOptionPane.ERROR_MESSAGE);
-        }
-        //System.out.println(pass);
-        else if(choice.equalsIgnoreCase("Manager")){
-            String sql="SELECT * FROM  `empleados` WHERE  `nombre` LIKE  '"+jTextField1.getText()+"' AND `tipo` LIKE  'Manager' AND  `contraseña` =  '"+pass+"'";
-            try{
-                Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
-                Statement s =(Statement) con.prepareStatement(sql);
-                ResultSet rs=s.executeQuery(sql);
-                if(rs.next()){
-                    int id = Integer.parseInt( rs.getString(1));
-                    System.out.println(id);
-                    Venta sell = new Venta(id,2);
-                    sell.setVisible(true);
-                    setVisible(false);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos", "Acceso Denegado",JOptionPane.ERROR_MESSAGE);
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        else{
-            //for employee login
+        } else {
             String sql="SELECT * FROM  `empleados` WHERE  `nombre` LIKE  '"+jTextField1.getText()+"' AND  `contraseña` =  '"+pass+"'";
-            try{
-                //System.out.println(jPasswordField1.getPassword());
+            try {
                 Connection con= (Connection) DriverManager.getConnection(conString, username, passward);
                 Statement s =(Statement) con.prepareStatement(sql);
                 ResultSet rs=s.executeQuery(sql);
                 if(rs.next()){
                     int id = Integer.parseInt( rs.getString(1));
-                    System.out.println(id);
-                    Venta sell = new Venta(id,2);
-                    sell.jButton3.setEnabled(false);
-                    sell.jButton1.setEnabled(false);
-                    sell.jButton13.setEnabled(false);
-                    sell.setVisible(true);
-                    setVisible(false);
+                    String typo = rs.getString(4);
+                    switch (typo) {
+                        case "Manager":
+                            new Venta(id,1).setVisible(true);
+                            setVisible(false);
+                            break;
+                        case "asd":
+                            Venta sell = new Venta(id,2);
+                            setVisible(false);
+                            sell.jButton3.setEnabled(false);
+                            sell.jButton1.setEnabled(false);
+                            sell.jButton13.setEnabled(false);
+                            sell.setVisible(true);
+                            setVisible(false);
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null,"Usuario Invalido", "Acceso Denegado",JOptionPane.ERROR_MESSAGE);
+                            break;
+                    }
                 }
                 else{
                     JOptionPane.showMessageDialog(null,"Nombre de usuario o contraseña incorrectos", "Acceso Denegado",JOptionPane.ERROR_MESSAGE);
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -231,7 +215,6 @@ public class LogIn extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
